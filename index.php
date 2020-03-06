@@ -2,81 +2,96 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Netland!</title>
+    <title>Title</title>
 </head>
 <body>
-
-    <h1>Welkom op het netland beheerderspaneel</h1>
-
     <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = "HywtGBNiwu823@";
+        function select($quary){
 
-    try {
-        $conn = new PDO("mysql:host=$servername;dbname=netland", $username, $password);
+            $host = 'localhost';
+            $db   = 'netland';
+            $user = 'root';
+            $pass = 'HywtGBNiwu823@';
+            $charset = 'utf8mb4';
+            
+            $dsn = "mysql:host=$host;dbname=$db;";
+            $options = [
+                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES   => false,
+            ];
 
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    }
-    catch(PDOException $e) {
-        echo "Connection failed: " . $e->getMessage();
-    }
-    $sql = 'SELECT *
-            FROM series
-            ORDER BY id';
+            try {
+                $pdo = new PDO($dsn, $user, $pass, $options);
+            } catch (\PDOException $e) {
+                throw new \PDOException($e->getMessage(), (int)$e->getCode());
+            }
 
-    $q = $conn->query($sql);
+            $formatResult = array();
 
-    $q->setFetchMode(PDO::FETCH_ASSOC);
+            $rawResult = $pdo->query($quary);
+            while ($row = $rawResult->fetch()) {
+                $rowResult = array();
+
+                foreach ($row as $collum => $value) {
+                    $rowResult[$collum] = $value;
+                }
+
+                $formatResult[] = $rowResult;
+            }
+
+            return $formatResult;
+        }
     ?>
+    <h1>Welkom op het netland beheerders paneel</h1>
 
-    <h2>Series</h2>
+    <h3>Series</h3>
 
-    <table class="table table-bordered table-condensed">
+    <table>
         <thead>
-        <tr>
             <th>Titel</th>
             <th>Rating</th>
-        </tr>
+            <th></th>
         </thead>
         <tbody>
-        <?php while ($r = $q->fetch()): ?>
-        <tr>
-            <td><?php echo $r['title']; ?></td>
-            <td><?php echo $r['rating']; ?></td>
-            <?php endwhile; ?>
+            <?php
+                $rows = select('SELECT * FROM series');
+                foreach ($rows as $row) {
+                    echo <<<EOT
+                        <tr>
+                            <td>${row['title']}</td>
+                            <td>${row['rating']}</td>
+                            <td><a href="series.php?id=${row['id']}">Meer details</a></td>
+                        </tr>
+                    EOT;
+                }
+            ?>
         </tbody>
     </table>
 
 
-<?php
-    $sql = 'SELECT *
-    FROM films
-    ORDER BY id';
+    <h3>Films</h3>
 
-    $q = $conn->query($sql);
-
-    $q->setFetchMode(PDO::FETCH_ASSOC);
-    ?>
-
-    <h2>Films</h2>
-
-    <table class="table table-bordered table-condensed">
+    <table>
         <thead>
-        <tr>
             <th>Titel</th>
             <th>Duur</th>
-        </tr>
+            <th></th>
         </thead>
         <tbody>
-        <?php while ($r = $q->fetch()): ?>
-            <tr>
-                <td><?php echo $r['title']; ?></td>
-                <td><?php echo $r['duration']; ?></td>
-        <?php endwhile; ?>
+            <?php
+            $rows = select('SELECT * FROM films');
+            foreach ($rows as $row) {
+                echo <<<EOT
+                            <tr>
+                                <td>${row['title']}</td>
+                                <td>${row['duration']}</td>
+                                <td><a href="films.php?id=${row['id']}">Meer details</a></td>
+                            </tr>
+                        EOT;
+            }
+            ?>
         </tbody>
     </table>
-
-    <script src="script.js"></script>
 </body>
 </html>
