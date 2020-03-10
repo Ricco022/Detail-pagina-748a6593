@@ -1,4 +1,3 @@
-//@codingStandardsIgnoreStart
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,4 +59,3 @@ $result = $pdo->query($query)->fetch();
 <p><?php echo $result['description'] ?></p>
 </body>
 </html>
-//@codingStandardsIgnoreEnd
