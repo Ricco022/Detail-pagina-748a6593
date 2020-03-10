@@ -35,7 +35,7 @@ $result = $pdo->query($query)->fetch();
         <tr>
             <td><strong>Awards?</strong></td>
             <td><?php
-                    if($result['has_won_awards']){
+                if($result['has_won_awards']){
                         echo 'Ja';
                     } else {
                         echo 'Nee';

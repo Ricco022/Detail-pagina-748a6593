@@ -6,42 +6,42 @@
 </head>
 <body>
     <?php
-        function select($quary){
+    function select($quary){
 
-            $host = 'localhost';
-            $db   = 'netland';
-            $user = 'root';
-            $pass = 'HywtGBNiwu823@';
-            $charset = 'utf8mb4';
-            
-            $dsn = "mysql:host=$host;dbname=$db;";
-            $options = [
-                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES   => false,
-            ];
+        $host = 'localhost';
+        $db   = 'netland';
+        $user = 'root';
+        $pass = 'HywtGBNiwu823@';
+        $charset = 'utf8mb4';
 
-            try {
-                $pdo = new PDO($dsn, $user, $pass, $options);
-            } catch (\PDOException $e) {
-                throw new \PDOException($e->getMessage(), (int)$e->getCode());
-            }
+        $dsn = "mysql:host=$host;dbname=$db;";
+        $options = [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES   => false,
+        ];
 
-            $formatResult = array();
-
-            $rawResult = $pdo->query($quary);
-            while ($row = $rawResult->fetch()) {
-                $rowResult = array();
-
-                foreach ($row as $collum => $value) {
-                    $rowResult[$collum] = $value;
-                }
-
-                $formatResult[] = $rowResult;
-            }
-
-            return $formatResult;
+        try {
+            $pdo = new PDO($dsn, $user, $pass, $options);
+        } catch (\PDOException $e) {
+            throw new \PDOException($e->getMessage(), (int)$e->getCode());
         }
+
+        $formatResult = array();
+
+        $rawResult = $pdo->query($quary);
+        while ($row = $rawResult->fetch()) {
+            $rowResult = array();
+
+            foreach ($row as $collum => $value) {
+                $rowResult[$collum] = $value;
+        }
+
+        $formatResult[] = $rowResult;
+    }
+
+    return $formatResult;
+    }
     ?>
     <h1>Welkom op het netland beheerders paneel</h1>
 
